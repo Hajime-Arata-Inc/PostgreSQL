@@ -5,19 +5,25 @@
 DjangoプロジェクトでPostgreSQLを使うための「ダウンロードから接続まで」の手順をまとめました。
 
 ---
-
-## 1. PostgreSQLのインストール
+PostgreSQLのインストール（Homebrew）
+任意のバージョンに合わせて `<version>` を変更してください。例：`14`, `15`, `16` など
 
 ```bash
-brew install postgresql@14(version)
-brew services start postgresql@14(version)
+brew install postgresql@<version>
 ```
 
-状態確認:
+インストールしたバージョンのサービスを起動
+```bash
+brew services start postgresql@<version>
+```
+
+状態確認コマンド（インストール済みのPostgreSQLサービスの確認）
 
 ```bash
 brew services list
 ```
+起動中なら　started
+停止中なら　stopped
 
 ---
 
@@ -68,9 +74,14 @@ brew services restart postgresql@14
 ### ユーザー作成
 
 ```sql
-CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'yourpassword';
-CREATE ROLE app WITH LOGIN PASSWORD 'apppass';
-CREATE ROLE readonly WITH LOGIN PASSWORD 'readonlypass';
+-- 管理者ユーザー（開発やデータベース操作用）
+CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'your_postgres_password';
+
+-- アプリ用ユーザー（Djangoなどアプリからの接続専用）
+CREATE ROLE app WITH LOGIN PASSWORD 'your_app_password';
+
+-- 読み取り専用ユーザー（監査・分析ツールなどから使う）
+CREATE ROLE readonly WITH LOGIN PASSWORD 'your_readonly_password';
 ```
 
 ### DB作成
@@ -94,11 +105,11 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO app;
 ### .env 例
 
 ```env
-DB_NAME=private_diary_db
-DB_USER=postgres
-DB_PASSWORD=yourpassword
-DB_HOST=localhost
-DB_PORT=5432
+DB_NAME=private_diary_db         # 使用するデータベース名
+DB_USER=postgres                 # データベース接続ユーザー名
+DB_PASSWORD=yourpassword         # ← ここは「実際のパスワード」に置き換えてください（GitHubには絶対に公開しない）
+DB_HOST=localhost                # 通常はローカル
+DB_PORT=5432                     # PostgreSQLの標準ポート番号
 ```
 
 ### settings.py の設定
