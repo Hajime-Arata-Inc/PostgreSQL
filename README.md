@@ -65,7 +65,7 @@ local   all             all                                     trust
 ## 4. PostgreSQL再起動
 
 ```bash
-brew services restart postgresql@14
+brew services restart postgresql@<version>
 ```
 
 ---
@@ -88,13 +88,13 @@ CREATE ROLE readonly WITH LOGIN PASSWORD 'your_readonly_password';
 ### DB作成
 
 ```sql
-CREATE DATABASE private_diary_db OWNER postgres;
+CREATE DATABASE your_db OWNER postgres;
 ```
 
 ### 権限付与
 
 ```sql
-GRANT CONNECT ON DATABASE private_diary_db TO app;
+GRANT CONNECT ON DATABASE your_db TO app;
 GRANT USAGE ON SCHEMA public TO app;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO app;
 ```
@@ -106,7 +106,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO app;
 ### .env 例
 
 ```env
-DB_NAME=private_diary_db         # 使用するデータベース名
+DB_NAME=your_db                  # 使用するデータベース名
 DB_USER=postgres                 # データベース接続ユーザー名
 DB_PASSWORD=yourpassword         # ← ここは「実際のパスワード」に置き換えてください（GitHubには絶対に公開しない）
 DB_HOST=localhost                # 通常はローカル
