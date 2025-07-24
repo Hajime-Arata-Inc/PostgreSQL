@@ -23,6 +23,7 @@ brew services start postgresql@<version>
 brew services list
 ```
 起動中なら　started
+
 停止中なら　stopped
 
 ---
