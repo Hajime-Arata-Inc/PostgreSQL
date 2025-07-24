@@ -4,8 +4,9 @@
 
 DjangoプロジェクトでPostgreSQLを使うための「ダウンロードから接続まで」の手順をまとめました。
 
+
 ---
-PostgreSQLのインストール（Homebrew）
+## PostgreSQLのインストール（Homebrew）
 任意のバージョンに合わせて `<version>` を変更してください。例：`14`, `15`, `16` など
 
 ```bash
@@ -26,19 +27,31 @@ brew services list
 
 停止中なら　stopped
 
+
 ---
 
-## 2. 初期化とログイン
+## PostgreSQLの初期化とログイン手順
+
+### ログインする（すでに初期化済みの場合）
 
 ```bash
 psql -U postgres
 ```
+デフォルトでは postgres ユーザーでログインします。
+ログインできない場合、初期化やサービス起動が必要なことがあります。
 
-初期化が必要な場合:
-
+初期化が必要な場合（初回セットアップ時など）
 ```bash
-initdb /usr/local/var/postgresql@<version> -E utf8
+initdb /usr/local/var/postgresql@<バージョン番号> -E utf8
 ```
+initdb はデータベースクラスタを初期化するコマンドです（最初の一度だけでOK）。
+<バージョン番号> には、インストールしたPostgreSQLのバージョンを指定します（例：14）。
+
+例：
+```bash
+initdb /usr/local/var/postgresql@14 -E utf8
+```
+
 
 ---
 
@@ -86,6 +99,7 @@ CREATE ROLE readonly WITH LOGIN PASSWORD 'your_readonly_password';
 ```
 
 ### DB作成
+PostgreSQLにログインした状態で、以下のSQLを実行すると新しいデータベースが作成される。
 
 ```sql
 CREATE DATABASE your_db OWNER postgres;
