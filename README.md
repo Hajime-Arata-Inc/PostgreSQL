@@ -9,8 +9,8 @@ DjangoプロジェクトでPostgreSQLを使うための「ダウンロードか�
 ## 1. PostgreSQLのインストール
 
 ```bash
-brew install postgresql@14
-brew services start postgresql@14
+brew install postgresql@14(version)
+brew services start postgresql@14(version)
 ```
 
 状態確認:
