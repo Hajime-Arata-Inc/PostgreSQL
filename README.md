@@ -37,7 +37,7 @@ psql -U postgres
 初期化が必要な場合:
 
 ```bash
-initdb /usr/local/var/postgresql@14 -E utf8
+initdb /usr/local/var/postgresql@<version> -E utf8
 ```
 
 ---
@@ -45,7 +45,7 @@ initdb /usr/local/var/postgresql@14 -E utf8
 ## 3. pg\_hba.confの設定
 
 ```bash
-nano /usr/local/var/postgresql@14/pg_hba.conf
+nano /usr/local/var/postgresql@<version>/pg_hba.conf
 ```
 
 ### trust から md5 に切り替え
