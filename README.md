@@ -180,7 +180,7 @@ Running migrations:
   * `\l` = データベース一覧
   * `\dt` = テーブル一覧
  
-#＃ .gitignore に追加しておくべき内容例
+## .gitignore に追加しておくべき内容例
 .env
 __pycache__/
 *.pyc
