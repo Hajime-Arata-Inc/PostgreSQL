@@ -117,7 +117,28 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO app;
 
 ## 6. Django との接続
 
-### .env 例
+
+### settings.py のデータベース設定（PostgreSQL + 環境変数）
+Django で PostgreSQL を使う場合、以下のように `settings.py` に記述します。
+
+```python
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',  # PostgreSQL を使用
+        'NAME': os.getenv('DB_NAME'),               # データベース名
+        'USER': os.getenv('DB_USER'),               # ユーザー名
+        'PASSWORD': os.getenv('DB_PASSWORD'),       # パスワード
+        'HOST': os.getenv('DB_HOST'),               # ホスト（例: localhost）
+        'PORT': os.getenv('DB_PORT'),               # ポート番号（例: 5432）
+    }
+}
+```
+
+### .env ファイルの内容例
 
 ```env
 DB_NAME=your_db                  # 使用するデータベース名
@@ -127,24 +148,6 @@ DB_HOST=localhost                # 通常はローカル
 DB_PORT=5432                     # PostgreSQLの標準ポート番号
 ```
 
-### settings.py の設定
-
-```python
-from dotenv import load_dotenv
-import os
-load_dotenv()
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
-    }
-}
-```
 
 ---
 
