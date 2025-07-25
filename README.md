@@ -196,3 +196,97 @@ db.sqlite3
 
 これでDjangoプロジェクトでPostgreSQLを安全に利用する基盤が整いました。
 
+---
+
+# PostgreSQL連携作業ログ
+
+---
+
+## 概要
+
+Djangoアプリ `private_diary` を SQLite から PostgreSQL に切り替えるための構築作業を行った。  
+環境変数を `.env` ファイルで管理し、セキュリティを保ちながら接続設定を完了。  
+その後、マイグレーションを実行し、データベース連携が正常に動作することを確認した。
+
+---
+## 作業ステップ
+
+### 1. PostgreSQLの起動確認
+
+```bash
+brew services list
+```
+
+### 2. psql にログインし、既存のロールとDBを削除
+
+```sql
+DROP DATABASE IF EXISTS your_db;
+DROP ROLE IF EXISTS app;
+DROP ROLE IF EXISTS your_user;
+```
+
+### 3. 新しいロールとデータベースを作成
+
+```sql
+CREATE ROLE app WITH LOGIN PASSWORD 'apppass';
+CREATE DATABASE your_db OWNER app;
+```
+
+### 4. `.env` ファイルの設定
+
+> `.env`（Gitに公開しない！）
+
+```env
+DB_NAME=your_db
+DB_USER=app
+DB_PASSWORD=apppass
+DB_HOST=localhost
+DB_PORT=5432
+```
+
+### 5. `settings.py` に環境変数から読み込む設定を追加
+
+```python
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
+    }
+}
+```
+
+### 6. Djangoマイグレーション実行
+
+```bash
+python manage.py migrate
+```
+
+`migrate` 成功を確認。
+
+---
+
+## セキュリティ対策
+
+- `.env` ファイルは `.gitignore` に追加済み
+- パスワードは仮の開発用（本番環境ではより複雑なものに変更予定）
+
+---
+
+## 今後の予定（次のフェーズ）
+
+- [ ] ユーザー認証（ログイン・登録）機能の追加
+- [ ] 投稿ユーザーの絞り込み（ログインユーザーの投稿のみ表示）
+- [ ] データベースへの初期投入（superuserの作成など）
+
+
+
+
