@@ -148,15 +148,25 @@ DB_HOST=localhost                # 通常はローカル
 DB_PORT=5432                     # PostgreSQLの標準ポート番号
 ```
 
-
 ---
 
-## 7. 接続確認
+## 7. 接続確認（データベースとDjangoの接続テスト）
+
+以下のコマンドを実行して、Django と PostgreSQL の接続が正しくできているかを確認します。
 
 ```bash
 python manage.py migrate
 ```
-
+正常な出力の例：
+実行すると、以下のように「Applying ... OK」という表示が複数出れば 接続成功 です。
+```bash
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  ...
+```
 ---
 
 ## 8. 補証
@@ -169,6 +179,12 @@ python manage.py migrate
   * `\du` = ユーザー一覧
   * `\l` = データベース一覧
   * `\dt` = テーブル一覧
+ 
+#＃ .gitignore に追加しておくべき内容例
+.env
+__pycache__/
+*.pyc
+db.sqlite3
 
 ---
 
